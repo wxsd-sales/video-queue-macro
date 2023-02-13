@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html style="overflow: hidden;">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Video Queue Example</title>
+<style>
+
+  #myVideo {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    min-width: 100%;
+    min-height: 100%;
+  }
+</style>
+
+</head>
+      <p>Looking for an available expert...</p>
+
+      <video id="myVideo" autoplay muted>
+        <source type="video/mp4" id="mp4Source">
+      Your browser does not support the video tag.
+      </video>
+
+      <script type='text/javascript'>
+        var count=0;
+        var player=document.getElementById('myVideo');
+        var mp4Vid = document.getElementById('mp4Source');
+        player.addEventListener('ended',myHandler,false);
+
+        var playlist = [
+          'videos/Collaborate on live video in real-time from anywhere.mp4',
+          'videos/Dancing to hold music is now a choice  _  Webex Contact Center.mp4',
+          'videos/Reimagined from the from the ground up  -  Cisco\'s Penn One Office.mp4',
+          'videos/Your complete cloud business phone system  _  Webex Calling.mp4'
+        ]
+
+        mp4Vid.setAttribute('src', playlist[0]);
+
+
+        function myHandler(e)
+        {
+           if(!e) 
+           {
+              e = window.event; 
+           }
+           count++;
+           if(count == playlist.length){
+            count = 0;
+           }
+           console.log('Playing Video: ' +count)
+           mp4Vid.setAttribute('src', playlist[count]);
+           player.load();
+           player.play();
+        }
+     
+     </script>
+</body>
+</html>
