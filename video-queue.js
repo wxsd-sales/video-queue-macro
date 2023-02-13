@@ -61,7 +61,7 @@ const config = {
     {
       title: 'Please wait 😊', // The title which is display when in modal mode
       number: '2222', // Number to monitor
-      url: 'https://socketeer.glitch.me/kiosk-voh.html',  // URL to display
+      url: 'https://wxsd-sales.github.io/video-queue-macro/example-content/',  // URL to display
       mode: 'Fullscreen',       // Fullscreen | Modal
       target: 'OSD'     // OSD | Controller
     }
