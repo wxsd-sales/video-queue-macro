@@ -1,7 +1,11 @@
 # Video Queue Macro
+Welcome to our WXSD DEMO Repo! <!-- Keep this here --> 
 
 This is a Webex Device Macro which displays a video while waiting in a call queue
 
+
+<!-- Keep the following here -->  
+ *_Everything included is for demo and Proof of Concept purposes only. Your use of the site is solely at your own risk. This site may contain links to third party content, which we do not warrant, endorse, or assume liability for. These demos are for Cisco Webex usecases, but are not Official Cisco Webex Branded demos._
 ## Configuration
 
 ```js
