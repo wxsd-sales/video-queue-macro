@@ -61,7 +61,7 @@ const config = {
     {
       title: 'Please wait 😊', // The title which is display when in modal mode
       number: '2222', // Number to monitor
-      url: 'https://wxsd-sales.github.io/video-queue-macro/example-content/',  // URL to display
+      url: 'https://www.youtube.com/embed/videoseries?list=PL_YnWo4XhzTcEQ1nFCzvxfklMv2kHbl9-&autoplay=1&loop=1/',  // URL to display
       mode: 'Fullscreen',       // Fullscreen | Modal
       target: 'OSD'     // OSD | Controller
     }
