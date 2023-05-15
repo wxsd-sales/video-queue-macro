@@ -1,12 +1,16 @@
 # Video Queue Macro
-Welcome to our WXSD DEMO Repo! <!-- Keep this here --> 
 
-This is a Webex Device Macro which displays a video while waiting in a call queue
+This is a Webex Device Macro which displays a video while waiting in a call queue. This demonstrates how additional content can be displayed on a Webex Device while a person is waiting for their call to be answered by an agent.
 
+## Overview
 
-<!-- Keep the following here -->  
- *_Everything included is for demo and Proof of Concept purposes only. Your use of the site is solely at your own risk. This site may contain links to third party content, which we do not warrant, endorse, or assume liability for. These demos are for Cisco Webex usecases, but are not Official Cisco Webex Branded demos._
-## Configuration
+This macro monitors which number a Webex Device is in a call with. Using this information, we can identify if a device is currently in a Webex Calling call queue by monitoring for the call queue extension number. Once detected, we can launch a WebView on the devices interface. This WebView can display any content you want to while the device waiting. In the example macro, we show an auto playing video playlist.
+
+The macro also adds a speed dial button to your device. The target number which the button will dial can be anything but for this example we dial the same Webex Calling call queue extension.
+
+Therefore, tapping the speed dial button will dial the call queue extension and then the macro will launch a WebView when it detects it is currently in a call with that queues extension.
+
+The configuration blow is a snippet from the macro and shows how to create multiple speed dial buttons and specify multiple call queue extension to monitor and also different web based content to be displayed for each.
 
 ```js
 const config = {
@@ -35,6 +39,7 @@ const config = {
 }
 ```
 
+
 ## Requirements
 
 1. Webex Device running RoomOS 10.20.x or above.
@@ -54,6 +59,23 @@ Validated Hardware:
 * Webex Desk Pro
 * Webex Desk Mini
 
-## Support
+  
+## Demo
 
-Please reach out to the WXSD team at [wxsd@external.cisco.com](mailto:wxsd@external.cisco.com?subject=video-queue-macro)
+*For more demos & PoCs like this, check out our [Webex Labs site](https://collabtoolbox.cisco.com/webex-labs).
+
+
+## License
+
+All contents are licensed under the MIT license. Please see [license](LICENSE) for details.
+
+
+## Disclaimer
+
+Everything included is for demo and Proof of Concept purposes only. Use of the site is solely at your own risk. This site may contain links to third party content, which we do not warrant, endorse, or assume liability for. These demos are for Cisco Webex use cases, but are not Official Cisco Webex Branded demos.
+
+
+## Questions
+Please contact the WXSD team at [wxsd@external.cisco.com](mailto:wxsd@external.cisco.com?subject=video-queue-macro) for questions. Or, if you're a Cisco internal employee, reach out to us on the Webex App via our bot (globalexpert@webex.bot). In the "Engagement Type" field, choose the "API/SDK Proof of Concept Integration Development" option to make sure you reach our team. 
+
+
