@@ -40,16 +40,19 @@ const config = {
 ```
 
 
-## Requirements
-
-1. Webex Device running RoomOS 10.20.x or above.
-2. Device Web Admin or Control Hub access to enable and upload the Macro.
-
 ## Setup
 
+### Prerequisites & Dependencies: 
+
+- Webex Device running RoomOS 10.20.x or above.
+- Device Web Admin or Control Hub access to enable and upload the Macro.
+
+
+### Installation Steps:
 1. Download the ``video-queue.js`` file and upload it to your Webex Room device.
 2. Configure the Macro by changing the initial values, there are comments explaining each one.
 3. Enable the Macro.
+
 
 ## Validation
 
