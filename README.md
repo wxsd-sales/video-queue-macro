@@ -48,10 +48,19 @@ const config = {
 - Device Web Admin or Control Hub access to enable and upload the Macro.
 
 
-### Installation Steps:
+### Macro Installation Steps:
 1. Download the ``video-queue.js`` file and upload it to your Webex Room device.
 2. Configure the Macro by changing the initial values, there are comments explaining each one.
 3. Enable the Macro.
+
+### Webex Calling Call Queue Configuration:
+
+This macro is intended to be used with a Webex Calling Call Queue as it is only this call flow in which the macro can detect it is waiting and has been answered by an agent. If the content you which to display while waiting has sound, it is recommended to disable the ringing tone and announcements on the Webex Calling Call Queue under  the Overflow Settings:
+
+Control Hub -> Calling -> Features -> Call Queue -> (Your Call Queue) -> Overflow Settings 
+
+![image](https://github.com/wxsd-sales/video-queue-macro/assets/21026209/aa5e2dca-37f3-4c0e-9534-3e37e6643423)
+
 
 
 ## Validation
