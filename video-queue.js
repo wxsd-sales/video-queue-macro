@@ -10,8 +10,8 @@
  *                    	wimills@cisco.com
  *                    	Cisco Systems
  * 
- * Version: 1-0-0
- * Released: 02/08/23
+ * Version: 1-0-1
+ * Released: 02/21/24
  * 
  * This is a Webex Device Macro which displays a video while 
  * waiting in a Webex Calling call queue:
@@ -56,8 +56,9 @@ const config = {
     }
     // Add your additional queue monitoring settings here
   ],
-  hideUI: true, // true = hide out of call controls, false = show controls
+  hideUI: false, // true = hide out of call controls, false = show controls
   hideIncallUI: false,  // true = hide in call call controls, false = show controls
+  clearWebData: true,  // Clear Web Data after call has ended
   panelId: 'call-queue',  // Our base Panel Id for all speed dial buttons
 }
 
@@ -66,21 +67,25 @@ const config = {
  * Below contains all macros functions
 **********************************************************/
 
+
+let clearCache = false;
+
 //Create our speed dial buttons
 config.buttons.forEach((button, i) => createPanel(button, i))
 
 // Subscribe to Events & Status changes
+xapi.Status.Call['*'].ghost.on(processCallGhost);
 xapi.Event.UserInterface.Extensions.Panel.Clicked.on(processClicks)
 xapi.Status.SystemUnit.State.NumberOfActiveCalls.on(processCallCount);
 xapi.Status.Call.RemoteNumber.on(processRemoteNumber)
 
 // Initially chech the number of calls to set the UI config
 xapi.Status.SystemUnit.State.NumberOfActiveCalls.get()
-.then(r=>processCallCount(r))
+  .then(r => processCallCount(r))
 
 function processCallCount(event) {
-  console.log('Number of calls: ' +event)
-  if(event == 0) {
+  console.log('Number of calls: ' + event)
+  if (event == 0) {
     hideCommercial();
     setUIVisability(!config.hideUI)
   } else {
@@ -88,12 +93,21 @@ function processCallCount(event) {
   }
 }
 
-function processRemoteNumber(event){
+function processCallGhost() {
+  hideCommercial();
+  if (clearCache) {
+    clearCache = false;
+    clearWebCache();
+    setTimeout(clearWebCache, 200);
+  }
+}
+
+function processRemoteNumber(event) {
   console.log(`Remote Number [${event}]`)
   // Check if a monitoring number is present
   const match = config.queues.find(queue => event.startsWith(queue.number))
   // Ignore calls with not matched number
-  if(!match) {
+  if (!match) {
     console.log('No number matched');
     hideCommercial();
     return;
@@ -111,7 +125,8 @@ function processClicks(event) {
   dial(config.buttons[index].target)
 }
 
-function showCommercial({title, url, mode, target }) {
+function showCommercial({ title, url, mode, target }) {
+  if (config.clearWebData) clearCache = true;
   console.log(`Opening Webview on [${target}] - Title: ${title} | Mode: ${mode} | Url: ${url}`)
   xapi.Command.UserInterface.WebView.Display(
     { Mode: mode, Target: target, Title: title, Url: url })
@@ -123,7 +138,12 @@ function hideCommercial() {
   xapi.Command.UserInterface.WebView.Clear();
 }
 
-function setUIVisability(state){
+function clearWebCache() {
+  console.log('Clearing Web Cache')
+  xapi.Command.WebEngine.DeleteStorage({ Type: 'WebApps' });
+}
+
+function setUIVisability(state) {
   console.log('Setting UI Visability to: ' + state)
   xapi.Config.UserInterface.Features.HideAll.set(state ? 'False' : 'True');
 }
@@ -131,10 +151,14 @@ function setUIVisability(state){
 function dial(number) {
   console.log(`Dialing number [${number}]`);
   xapi.Command.Dial({ Number: number })
-  .catch(e=> console.log(`Unable to dial [${number}] - Error: ${e.message}`))
+    .catch(e => console.log(`Unable to dial [${number}] - Error: ${e.message}`))
 }
 
-function createPanel(button, i) {
+async function createPanel(button, i) {
+
+  const orderNum = await panelOrder(config.panelId + i)
+  const order = (orderNum != -1) ? `<Order>${orderNum}</Order>` : '';
+
   const panel = `
     <Extensions>
       <Panel>
@@ -143,6 +167,7 @@ function createPanel(button, i) {
         <Icon>${button.icon}</Icon>
         <Color>${button.color}</Color>
         <Name>${button.name}</Name>
+        ${order}
         <ActivityType>Custom</ActivityType>
       </Panel>
     </Extensions>`
@@ -151,4 +176,16 @@ function createPanel(button, i) {
     panel
   )
     .catch(e => console.log('Error saving panel: ' + e.message))
+}
+
+// This function finds the place order of the panel if it was saved previously
+async function panelOrder(panelId) {
+  const list = await xapi.Command.UserInterface.Extensions.List({ ActivityType: 'Custom' });
+  if (!list.hasOwnProperty('Extensions')) return -1
+  if (!list.Extensions.hasOwnProperty('Panel')) return -1
+  if (list.Extensions.Panel.length == 0) return -1
+  for (let i = 0; i < list.Extensions.Panel.length; i++) {
+    if (list.Extensions.Panel[i].PanelId == panelId) return list.Extensions.Panel[i].Order;
+  }
+  return -1
 }
